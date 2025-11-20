@@ -1,7 +1,7 @@
 package com.atm.nubefact.api.company.mapper;
 
 import com.atm.nubefact.api.company.dto.CompanyResponse;
-import com.atm.nubefact.domain.model.Company;
+import com.atm.nubefact.domain.company.model.Company;
 
 public class CompanyApiMapper {
 

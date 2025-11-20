@@ -2,6 +2,8 @@ package com.atm.nubefact.api.auth.controller;
 
 import com.atm.nubefact.api.auth.request.ApiKeyAuthRequest;
 import com.atm.nubefact.api.auth.response.TokenResponse;
+import com.atm.nubefact.api.common.response.ApiResponse;
+import com.atm.nubefact.api.common.response.ResponseFactory;
 import com.atm.nubefact.application.auth.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +22,12 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenResponse> authenticate(
+    public ResponseEntity<ApiResponse<TokenResponse>> authenticate(
             @RequestBody ApiKeyAuthRequest request
     ) {
         var response = authService.authenticate(request.getApiKey());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ResponseFactory.success(response)
+        );
     }
 }

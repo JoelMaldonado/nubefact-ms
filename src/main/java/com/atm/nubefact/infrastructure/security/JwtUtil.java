@@ -1,5 +1,7 @@
 package com.atm.nubefact.infrastructure.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -19,11 +21,9 @@ public class JwtUtil {
 
 
     public String generateToken(Long clientId, int minutes) {
-
         Date now = new Date();
         Date exp = new Date(now.getTime() + minutes * 60_000L);
         String jti = UUID.randomUUID().toString();
-
         return Jwts.builder()
                 .setSubject(clientId.toString())
                 .setId(jti)
@@ -33,5 +33,28 @@ public class JwtUtil {
                 .setAudience(AUDIENCE)
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Claims parseToken(String token) throws JwtException {
+        return Jwts.parserBuilder()
+                .setSigningKey(KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean isValid(String token) {
+        try {
+            Claims claims = parseToken(token);
+            Date exp = claims.getExpiration();
+            return exp == null || exp.after(new Date());
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public Long getClientId(String token) {
+        Claims claims = parseToken(token);
+        return Long.valueOf(claims.getSubject());
     }
 }

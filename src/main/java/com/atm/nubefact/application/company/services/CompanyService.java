@@ -1,7 +1,7 @@
 package com.atm.nubefact.application.company.services;
 
-import com.atm.nubefact.domain.model.Company;
-import com.atm.nubefact.domain.repository.CompanyRepository;
+import com.atm.nubefact.domain.company.model.Company;
+import com.atm.nubefact.domain.company.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,9 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(
+            CompanyRepository companyRepository
+    ) {
         this.companyRepository = companyRepository;
     }
 
@@ -23,4 +25,5 @@ public class CompanyService {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
     }
+
 }
